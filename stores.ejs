@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CARTIER ROYAL | STORES</title>
+  <link rel="stylesheet" href="css/stores.css" />
+</head>
+
+<body>
+  <%- include('partials/nav') %>
+  <div class="container">
+    <div class="sidebar">
+      <div class="filter-section">
+        <h2>Category:</h2>
+        <input type="checkbox" name="category" id="high-end" value="high" <%
+          if (categories.includes('high')) { %> checked <% } %> />
+        <label for="high-end">High-End</label>
+        <input type="checkbox" name="category" id="mid-range" value="mid" <%
+          if (categories.includes('mid')) { %> checked <% } %> />
+        <label for="mid-range">Mid-Range</label>
+        <input type="checkbox" name="category" id="low-end" value="low" <% if
+          (categories.includes('low')) { %> checked <% } %> />
+        <label for="low-end">Low-End</label>
+      </div>
+      <div class="filter-section">
+        <h2>Sort</h2>
+        <input type="radio" id="price-high" name="sort-by" value="3" <% if
+          (sortBy === '3') { %> checked <% } %> />
+        <label for="price-high">Price ⬆</label>
+        <input type="radio" id="price-low" name="sort-by" value="2" <% if
+          (sortBy === '2') { %> checked <% } %> />
+        <label for="price-low">Price ⬇</label>
+        <input type="radio" id="featured" name="sort-by" value="1" <% if
+          (sortBy === '1') { %>  <% } %> />
+        <label for="featured">Featured</label>
+      </div>
+
+      <button class="apply-btn" onclick="applyFilters()">
+        Apply Filters
+      </button>
+    </div>
+    <div class="content">
+      <div class="stores">
+        <h1>High-End Watches</h1>
+        <div class="store">
+          <% for (let i=0; i < stores.length; i++) { %>
+          <div class="card">
+            <img src="<%= stores[i].url %>" alt="" />
+            <div class="card-content">
+              <h2><%= stores[i].name %></h2>
+              <p><%= stores[i].description %></p>
+              <a href="#" class="button">
+                <span class="material-symbols-outlined" onclick="openPopup('<%= i %>')">View More<i class="bx bx-right-arrow-circle"></i></span>
+              </a>
+            </div>
+          </div>
+          <% } %> <% if (stores.length === 0) { %>
+          <p>No stores found.</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <% for (let i=0; i < stores.length; i++) { %>
+    <div id="popup_<%= i %>" class="overlay">
+      <div class="overlay-content">
+        <span class="close-btn" onclick="closePopup('<%= i %>')">X</span>
+        <% if (stores[i].products.high.length > 0) { %>
+        <h2>High-End Watches</h2>
+        <div class="product-list">
+          <% for (let j=0; j < stores[i].products.high.length; j++) { %>
+          <a href="/product/<%= stores[i].products.high[j].id %>" class="product-card">
+            <img src="<%= stores[i].products.high[j].image %>" alt="<%= stores[i].products.high[j].name %>" />
+            <h3>
+              <%= stores[i].products.high[j].name %> | <%=
+                  stores[i].products.high[j].brand %>
+            </h3>
+            <p><%= stores[i].products.high[j].price %></p>
+            <p><%= stores[i].products.high[j].description %></p>
+          </a>
+          <% } %>
+        </div>
+        <% } %>
+        <% if (stores[i].products.mid.length > 0) { %>
+        <h2>Mid-Range Watches</h2>
+        <div class="product-list">
+          <% for (let j=0; j < stores[i].products.mid.length; j++) { %>
+          <a href="/product/<%= stores[i].products.mid[j].id %>" class="product-card">
+            <img src="<%= stores[i].products.mid[j].image %>" alt="<%= stores[i].products.mid[j].name %>" />
+            <h3>
+              <%= stores[i].products.mid[j].name %> | <%=
+                  stores[i].products.mid[j].brand %>
+            </h3>
+            <p><%= stores[i].products.mid[j].price %></p>
+            <p><%= stores[i].products.mid[j].description %></p>
+          </a>
+          <% } %>
+        </div>
+        <% } %>
+        <% if (stores[i].products.low.length > 0) { %>
+        <h2>Low-End Watches</h2>
+        <div class="product-list">
+          <% for (let j=0; j < stores[i].products.low.length; j++) { %>
+          <a href="/product/<%= stores[i].products.low[j].id %>" class="product-card">
+            <img src="<%= stores[i].products.low[j].image %>" alt="<%= stores[i].products.low[j].name %>" />
+            <h3>
+              <%= stores[i].products.low[j].name %> | <%=
+                  stores[i].products.low[j].brand %>
+            </h3>
+            <p><%= stores[i].products.low[j].price %></p>
+            <p><%= stores[i].products.low[j].description %></p>
+          </a>
+          <% } %>
+        </div>
+        <% } %>
+        <% if (stores[i].products.high.length === 0 && stores[i].products.mid.length === 0 && stores[i].products.low.length === 0) { %>
+        <h2>No products found.</h2>
+        <% } %>
+      </div>
+    </div>
+    <% } %>
+  </div>
+
+  <script>
+    async function applyFilters() {
+      const sortBy = document.querySelector(
+        'input[name="sort-by"]:checked'
+      ).value;
+      const categories = Array.from(
+        document.querySelectorAll('input[name="category"]:checked')
+      ).map((el) => el.value);
+
+      window.location.href = `/stores?sortBy=${sortBy}&categories=${categories.join(
+          ","
+        )}`;
+    }
+
+    function openPopup(id) {
+      document.getElementById(`popup_${id}`).style.display = "block";
+    }
+
+    function closePopup(id) {
+      document.getElementById(`popup_${id}`).style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target.className === "overlay") {
+        event.target.style.display = "none";
+      }
+    };
+
+    window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const sortBy = urlParams.get("sortBy") || "1";
+      const categories = urlParams.get("categories") || "";
+      const categoryCheckboxes = document.querySelectorAll(
+        'input[name="category"]'
+      );
+      categoryCheckboxes.forEach((el) => {
+        if (categories.includes(el.value)) {
+          el.checked = true;
+        }
+      });
+
+      const sortByRadios = document.querySelectorAll('input[name="sort-by"]');
+      sortByRadios.forEach((el) => {
+        if (el.value === sortBy) {
+          el.checked = true;
+        }
+      });
+    };
+  </script>
+</body>
+
+</html>

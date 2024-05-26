@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CARTIER ROYAL | PROFILE</title>
+  <link rel="stylesheet" href="/css/profile.css" />
+</head>
+
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="container-profile">
+    <div class="sidebar-profile">
+      <h2>Menu</h2>
+      <ul>
+        <li><a class="active" href="#" id="dash_menu" onclick="showDashboard()">Dashboard</a></li>
+        <li><a class="" href="#" id="order_menu" onclick="showOrders()">Order History</a></li>
+        <li><a class="" href="#" id="logout_menu" onclick="logout()">Logout</a></li>
+      </ul>
+    </div>
+    <div class="profile" id="dashboard">
+      <h1>Dashboard</h1>
+      <hr />
+      <div id="userDetails">
+        <h2>User Details</h2>
+        <p><strong>Username:</strong> <%= req.session.username %></p>
+        <p><strong>Email:</strong> <%= user.email %></p>
+        <p><strong>Type:</strong> <%= user.accountType %></p>
+        <p><strong>Phone:</strong> <%= user.contact %></p>
+        <button onclick="editProfile()">Edit Profile</button>
+      </div>
+      <div id="editForm" style="display: none">
+        <h2>Edit Profile</h2>
+        <button onclick="editProfileBack()" style="margin-bottom: 20px">
+          Go Back
+        </button>
+        <form action="/editProfile" method="POST">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" value="<%= req.session.username %>" pattern="[a-zA-Z0-9]+" required /><br /><br />
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" value="<%= user.email %>" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required /><br /><br />
+          <label for="changeType">Change Type : </label>
+          <select name="accountType" id="changeType">
+            <option value="customer">Customer</option>
+            <option value="seller">Seller</option>
+          </select><br /><br />
+          <label for="phone">Phone:</label>
+          <input type="number" id="phone" name="contact" value="<%= user.contact %>" pattern="[0-9]{10}" required /><br /><br />
+          <button type="submit">Save</button>
+        </form>
+      </div>
+    </div>
+    <div class="profile" id="orders" style="display: none">
+      <h1>Order History</h1>
+      <hr />
+      <% for (let i = 0; i < orders.length; i++) { %>
+      <div class="order">
+        <h2>Order #<%= i + 1 %></h2>
+        <p><strong>Store:</strong> <%= orders[i].store %></p>
+        <p><strong>Date:</strong> <%= orders[i].date %></p>
+        <p><strong>Address:</strong> <%= orders[i].address %></p>
+        <p><strong>Payment Method:</strong> <%= orders[i].payment %></p>
+        <p><strong>Items:</strong> <%= orders[i].products.join(", ") %></p>
+        <p><strong>Total:</strong> $<%= orders[i].total %></p>
+      </div>
+      <% } %>
+      <!-- Add more orders as needed -->
+    </div>
+
+    <div class="profile" id="logout" style="display: none">
+      <h1>Logout</h1>
+      <hr />
+      <p>Are you sure you want to logout?</p>
+      <button onclick="logoutUser()">Yes</button>
+    </div>
+  </div>
+
+  <script>
+    function showDashboard() {
+      hideAll();
+      document.getElementById("dash_menu").classList.add("active");
+      document.getElementById("order_menu").classList.remove("active");
+      document.getElementById("logout_menu").classList.remove("active");
+      document.getElementById("dashboard").style.display = "block";
+    }
+
+    function showOrders() {
+      hideAll();
+      document.getElementById("dash_menu").classList.remove("active");
+      document.getElementById("order_menu").classList.add("active");
+      document.getElementById("logout_menu").classList.remove("active");
+      document.getElementById("orders").style.display = "block";
+    }
+
+    function logout() {
+      hideAll();
+      document.getElementById("dash_menu").classList.remove("active");
+      document.getElementById("order_menu").classList.remove("active");
+      document.getElementById("logout_menu").classList.add("active");
+      document.getElementById("logout").style.display = "block";
+    }
+
+    function hideAll() {
+      var profiles = document.getElementsByClassName("profile");
+      for (var i = 0; i < profiles.length; i++) {
+        profiles[i].style.display = "none";
+      }
+    }
+
+    function editProfile() {
+      var editForm = document.getElementById("editForm");
+      editForm.style.display = "block";
+      var userDetails = document.getElementById("userDetails");
+      userDetails.style.display = "none";
+    }
+
+    function editProfileBack() {
+      var editForm = document.getElementById("editForm");
+      editForm.style.display = "none";
+      var userDetails = document.getElementById("userDetails");
+      userDetails.style.display = "block";
+    }
+
+    function logoutUser() {
+      window.location.href = "/logout";
+    }
+  </script>
+</body>
+
+</html>

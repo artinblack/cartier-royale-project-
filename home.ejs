@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CARTIER ROYAL | HOME</title>
+    <link rel="stylesheet" href="/css/home.css" />
+    <link rel="icon" href="/images/icon.jpg" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <%- include('partials/nav') %>
+    <!-- Slider -->
+    <div class="slider">
+      <div class="slides">
+        <div class="slide">
+          <img src="/images/slider1.jpg" alt="Slide 1" />
+        </div>
+        <div class="slide">
+          <img src="/images/slider2.jpg" alt="Slide 2" />
+        </div>
+        <div class="slide">
+          <img src="/images/slider3.jpg" alt="Slide 3" />
+        </div>
+      </div>
+      <span class="prev" onclick="prevSlide()">&#10094;</span>
+      <span class="next" onclick="nextSlide()">&#10095;</span>
+    </div>
+    <!-- Banner -->
+    <div class="banner">
+      <h2>Featured brands</h2>
+      <p>Check out our latest and greatest brands!</p>
+    </div>
+
+    <div id="popup_x" class="overlay">
+      <div class="overlay-content">
+        <span class="close-btn" onclick="closePopup('x')">X</span>
+        <h2>High End</h2>
+        <div class="product-list">
+          <a href="#" class="product-card">
+            <img src="/images/slider1.jpg" alt="Product 1" />
+            <h3>Product 1</h3>
+            <p>Price</p>
+            <p>Description of Product 1.</p>
+          </a>
+          <a href="#" class="product-card">
+            <img src="/images/slider2.jpg" alt="Product 2" />
+            <h3>Product 2</h3>
+            <p>Price</p>
+            <p>Description of Product 2.</p>
+          </a>
+          <a href="#" class="product-card">
+            <img src="/images/slider3.jpg" alt="Product 3" />
+            <h3>Product 3</h3>
+            <p>Price</p>
+            <p>Description of Product 3.</p>
+          </a>
+        </div>
+        <h2>Mid-Range</h2>
+        <div class="product-list">
+          <a href="#" class="product-card">
+            <img src="/images/slider1.jpg" alt="Product 1" />
+            <h3>Product 1</h3>
+            <p>Price</p>
+            <p>Description of Product 1.</p>
+          </a>
+          <a href="#" class="product-card">
+            <img src="/images/slider2.jpg" alt="Product 2" />
+            <h3>Product 2</h3>
+            <p>Price</p>
+            <p>Description of Product 2.</p>
+          </a>
+          <a href="#" class="product-card">
+            <img src="/images/slider3.jpg" alt="Product 3" />
+            <h3>Product 3</h3>
+            <p>Price</p>
+            <p>Description of Product 3.</p>
+          </a>
+        </div>
+        <h2>Low Range</h2>
+        <div class="product-list">
+          <a href="#" class="product-card">
+            <img src="/images/slider1.jpg" alt="Product 1" />
+            <h3>Product 1</h3>
+            <p>Price</p>
+            <p>Description of Product 1.</p>
+          </a>
+          <a href="#" class="product-card">
+            <img src="/images/slider2.jpg" alt="Product 2" />
+            <h3>Product 2</h3>
+            <p>Price</p>
+            <p>Description of Product 2.</p>
+          </a>
+          <a href="#" class="product-card">
+            <img src="/images/slider3.jpg" alt="Product 3" />
+            <h3>Product 3</h3>
+            <p>Price</p>
+            <p>Description of Product 3.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <% for (let i=0; i < stores.length; i++) { %>
+    <div id="popup_<%= i %>" class="overlay">
+      <div class="overlay-content">
+        <span class="close-btn" onclick="closePopup('<%= i %>')">X</span>
+        <h2>Products</h2>
+        <div class="product-list">
+          <% for (let j=0; j < stores[i].products.length; j++) { %>
+          <a
+            href="/product/<%= stores[i].products[j].id %>"
+            class="product-card"
+          >
+            <img
+              src="<%= stores[i].products[j].image %>"
+              alt="<%= stores[i].products[j].name %>"
+            />
+            <h3><%= stores[i].products[j].name %></h3>
+            <p>Price: <%= stores[i].products[j].price %></p>
+            <p><%= stores[i].products[j].description %></p>
+          </a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <% } %>
+
+    <div class="cardsss">
+      <% for (let i=0; i < stores.length; i++) { %>
+      <div class="card">
+        <img src="<%= stores[i].url %>" alt="" />
+        <div class="card-content">
+          <h2><%= stores[i].name %></h2>
+          <p><%= stores[i].description %></p>
+          <a href="#" class="button">
+            <span
+              class="material-symbols-outlined"
+              onclick="openPopup('<%= i %>')"
+            >
+              View More
+              <i class="bx bx-right-arrow-circle"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+      <% } %>
+    </div>
+    <% if (stores.length === 0) { %>
+      <h3>No stores found</h3>
+    <%= stores.length %> <% } %>
+
+    <script>
+      let currentSlide = 0;
+      const slides = document.querySelectorAll(".slide");
+
+      function showSlide(n) {
+        slides.forEach((slide) => {
+          slide.style.transform = `translateX(-${n * 100}%)`;
+        });
+        currentSlide = n;
+      }
+
+      function nextSlide() {
+        if (currentSlide < slides.length - 1) {
+          showSlide(currentSlide + 1);
+        } else {
+          showSlide(0);
+        }
+      }
+
+      function prevSlide() {
+        if (currentSlide > 0) {
+          showSlide(currentSlide - 1);
+        } else {
+          showSlide(slides.length - 1);
+        }
+      }
+
+      // Auto slide change every 4 seconds
+      setInterval(nextSlide, 4000);
+
+      // Popup
+      function openPopup(id) {
+        document.getElementById(`popup_${id}`).style.display = "block";
+      }
+
+      function closePopup(id) {
+        document.getElementById(`popup_${id}`).style.display = "none";
+      }
+    </script>
+  </body>
+</html>

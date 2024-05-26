@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CARTIER ROYAL | MANAGE</title>
+  <link rel="stylesheet" href="/css/profile.css" />
+</head>
+
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="container-profile">
+    <div class="sidebar-profile">
+      <h2>Manage Profile</h2>
+      <ul>
+        <li>
+          <a id="m_add_store" class="active" onclick="AddStore()">Add Store</a>
+        </li>
+        <li>
+          <a id="m_view_store" class="" onclick="ViewStore()">View Store</a>
+        </li>
+        <li>
+          <a id="m_del_store" class="" onclick="removeStore()">Remove Store</a>
+        </li>
+        <li>
+          <a id="m_add_prod" class="" onclick="addProduct()">Add Product</a>
+        </li>
+        <li>
+          <a id="m_del_prod" class="" onclick="removeProduct()">Remove Product</a>
+        </li>
+        <% if (req.session.admin) { %>
+        <li><a id="m_add_usr" class="" onclick="addUser()">Add User</a></li>
+        <li>
+          <a id="m_del_usr" class="" onclick="removeUser()">Remove User</a>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+    <div class="profile" id="addStore">
+      <h1>Add Store</h1>
+      <hr />
+      <% if (msg) { %>
+      <p id="msgBackend" style="color: red"><%= msg %></p>
+      <% } %>
+      <div id="editForm">
+        <form action="/addStore" method="post">
+          <label for="store_name">Store Name:</label>
+          <input type="text" id="store_name" name="name" value="MyStore" required /><br /><br />
+          <label for="email">Store ID:</label>
+          <input type="text" id="store_name" name="id" value="xyz123" pattern="[a-zA-Z0-9]+" required /><br /><br />
+          <label for="description">Store Description:</label>
+          <textarea id="description" name="description" value="MyStore" required></textarea><br /><br />
+          <label for="url">Image URL:</label>
+          <input type="text" id="url" name="url" value="" required /><br /><br />
+          <input type="submit" value="Save" />
+        </form>
+      </div>
+    </div>
+
+    <div class="profile" id="viewStore" style="display: none">
+      <h1>View Store</h1>
+      <hr />
+      <% if (stores.length > 0) { %> <% for (let i=0; i < stores.length; i++)
+        { %>
+      <div class="store">
+        <h2>Store #<%= stores[i].id %></h2>
+        <p>
+          <strong>Store Name:</strong>
+          <%= stores[i].name %>
+        </p>
+        <p>
+          <strong>Store ID:</strong>
+          <%= stores[i].id %>
+        </p>
+        <p>
+          <strong>Image URL:</strong>
+          <%= stores[i].url %>
+        </p>
+      </div>
+      <% } %> <% } else { %>
+      <p>No stores found.</p>
+      <% } %>
+      <!-- Add more stores as needed -->
+    </div>
+
+    <div class="profile" id="removeStore" style="display: none">
+      <h1>Remove Store</h1>
+      <hr />
+      <% if (msg) { %>
+      <p id="msgBackend" style="color: red"><%= msg %></p>
+      <% } %>
+      <form action="/removeStore" method="post">
+        <label for="store_id">Store ID:</label>
+        <input type="text" id="store_id" name="store_id" value="xyz123" required /><br /><br />
+        <input type="submit" value="Remove" />
+      </form>
+    </div>
+
+    <div class="profile" id="addProduct" style="display: none">
+      <h1>Add Product</h1>
+      <hr />
+      <% if (msg) { %>
+      <p id="msgBackend" style="color: red"><%= msg %></p>
+      <% } %>
+      <form action="/addProduct" method="post">
+        <label for="store_id">Store ID:</label>
+        <input type="text" id="store_id" name="store_id" value="xyz123" pattern="[a-zA-Z0-9]+" required /><br />
+        <label for="product_name">Product Name:</label>
+        <input type="text" id="product_name" name="product_name" value="MyProduct" required /><br />
+        <label for="product_id">Product ID:</label>
+        <input type="text" id="product_id" name="product_id" value="prod123" pattern="[a-zA-Z0-9]+" required /><br />
+        <label for="product_price">Product Description:</label>
+        <textarea id="product_description" name="product_description" value="awesome product" required></textarea><br />
+        <label for="product_category">Product Category:</label>
+        <select name="product_category" required>
+          <option value="" disabled selected>Select Category</option>
+          <option value="High">High-End</option>
+          <option value="Mid">Mid-Range</option>
+          <option value="Low">Low-End</option>
+        </select><br />
+        <label for="product_brand">Product Brand:</label>
+        <select name="product_brand" required disabled>
+          <option value="" disabled selected>Select Brand</option>
+          <option id="high_select" value="Rolex">Rolex</option>
+          <option id="high_select" value="Patek Philippe">
+            Patek Philippe
+          </option>
+          <option id="high_select" value="Audemars Piguet">
+            Audemars Piguet
+          </option>
+          <option id="high_select" value="Jacob & Co.">Jacob & Co.</option>
+          <option id="mid_select" value="Omega">Omega</option>
+          <option id="mid_select" value="Tissot">Tissot</option>
+          <option id="mid_select" value="Raymond Weil">Raymond Weil</option>
+          <option id="mid_select" value="Police">Police</option>
+          <option id="low_select" value="Citizen">Citizen</option>
+          <option id="low_select" value="Orient">Orient</option>
+          <option id="low_select" value="Seiko">Seiko</option>
+          <option id="low_select" value="Timex">Timex</option>
+        </select><br />
+        <label for="product_price">Product Price:</label>
+        $<input type="number" id="product_price" name="product_price" value="1000" required /><br />
+        <label for="product_image">Product Image URL:</label>
+        <input type="text" id="product_image" name="product_image" value="" required /><br />
+        <input type="submit" value="Add" />
+      </form>
+    </div>
+
+    <div class="profile" id="removeProduct" style="display: none">
+      <h1>Remove Product</h1>
+      <hr />
+      <% if (msg) { %>
+      <p id="msgBackend" style="color: red"><%= msg %></p>
+      <% } %>
+      <form action="/removeProduct" method="post">
+        <label for="store">Store ID:</label>
+        <input type="text" id="store" name="store" value="xyz123" required /><br /><br />
+        <label for="product">Product ID:</label>
+        <input type="text" id="product" name="product" value="prod123" required /><br /><br />
+        <input type="submit" value="Remove" />
+      </form>
+    </div>
+
+    <div class="profile" id="addUser" style="display: none">
+      <h1>Add User</h1>
+      <hr />
+      <% if (msg) { %>
+      <p id="msgBackend" style="color: red"><%= msg %></p>
+      <% } %>
+      <form action="/addProfile" method="post">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="" pattern="[a-zA-Z0-9]+" required /><br /><br />
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required /><br /><br />
+        <label for="type">Account Type :</label>
+        <select name="accountType" required>
+          <option value="" disabled selected>Select Account Type</option>
+          <option value="customer">Customer</option>
+          <option value="seller">Seller</option>
+          <option value="admin">Admin</option>
+        </select><br /><br />
+        <label for="contact">Contact:</label>
+        <input type="number" id="contact" name="contact" value="" pattern="[0-9]{10}" required /><br /><br />
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" value="" required /><br /><br />
+        <input type="submit" value="Add" />
+      </form>
+    </div>
+
+    <div class="profile" id="removeUser" style="display: none">
+      <h1>Remove User</h1>
+      <hr />
+      <% if (msg) { %>
+      <p id="msgBackend" style="color: red"><%= msg %></p>
+      <% } %>
+      <form action="/removeProfile" method="post">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="" required /><br /><br />
+        <input type="submit" value="Remove" />
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let addStore = document.getElementById("m_add_store");
+    let viewStore = document.getElementById("m_view_store");
+    let delStore = document.getElementById("m_del_store");
+    let addProd = document.getElementById("m_add_prod");
+    let delProd = document.getElementById("m_del_prod");
+    let addUsr = document.getElementById("m_add_usr");
+    let delUsr = document.getElementById("m_del_usr");
+
+    let msgBackend = document.querySelectorAll("#msgBackend");
+    setTimeout(() => {
+      msgBackend.forEach((msg) => {
+        if (msg) {
+          msg.style.opacity = "0";
+          setTimeout(() => {
+            msg.style.display = "none";
+          }, 300);
+        }
+      });
+    }, 3000);
+
+    let menu = "<%= menu %>";
+    switch (menu) {
+      case "1":
+        AddStore();
+        break;
+      case "2":
+        ViewStore();
+        break;
+      case "3":
+        removeStore();
+        break;
+      case "4":
+        addProduct();
+        break;
+      case "5":
+        removeProduct();
+        break;
+      case "6":
+        addUser();
+        break;
+      case "7":
+        removeUser();
+        break;
+    }
+
+    function AddStore() {
+      hideAll();
+      addStore.classList.add("active");
+      viewStore.classList.remove("active");
+      delStore.classList.remove("active");
+      addProd.classList.remove("active");
+      delProd.classList.remove("active");
+      if (addUsr) if (addUsr) addUsr.classList.remove("active");
+      if (delUsr) if (delUsr) delUsr.classList.remove("active");
+      document.getElementById("addStore").style.display = "block";
+    }
+
+    function ViewStore() {
+      hideAll();
+      addStore.classList.remove("active");
+      viewStore.classList.add("active");
+      delStore.classList.remove("active");
+      addProd.classList.remove("active");
+      delProd.classList.remove("active");
+      if (addUsr) addUsr.classList.remove("active");
+      if (delUsr) delUsr.classList.remove("active");
+      document.getElementById("viewStore").style.display = "block";
+    }
+
+    function removeStore() {
+      hideAll();
+      addStore.classList.remove("active");
+      viewStore.classList.remove("active");
+      delStore.classList.add("active");
+      addProd.classList.remove("active");
+      delProd.classList.remove("active");
+      if (addUsr) addUsr.classList.remove("active");
+      if (delUsr) delUsr.classList.remove("active");
+      document.getElementById("removeStore").style.display = "block";
+    }
+
+    function addProduct() {
+      hideAll();
+      addStore.classList.remove("active");
+      viewStore.classList.remove("active");
+      delStore.classList.remove("active");
+      addProd.classList.add("active");
+      delProd.classList.remove("active");
+      if (addUsr) addUsr.classList.remove("active");
+      if (delUsr) delUsr.classList.remove("active");
+      document.getElementById("addProduct").style.display = "block";
+    }
+
+    function removeProduct() {
+      hideAll();
+      addStore.classList.remove("active");
+      viewStore.classList.remove("active");
+      delStore.classList.remove("active");
+      addProd.classList.remove("active");
+      delProd.classList.add("active");
+      if (addUsr) addUsr.classList.remove("active");
+      if (delUsr) delUsr.classList.remove("active");
+      document.getElementById("removeProduct").style.display = "block";
+    }
+
+    function addUser() {
+      hideAll();
+      addStore.classList.remove("active");
+      viewStore.classList.remove("active");
+      delStore.classList.remove("active");
+      addProd.classList.remove("active");
+      delProd.classList.remove("active");
+      addUsr.classList.add("active");
+      if (delUsr) delUsr.classList.remove("active");
+      document.getElementById("addUser").style.display = "block";
+    }
+
+    function removeUser() {
+      hideAll();
+      addStore.classList.remove("active");
+      viewStore.classList.remove("active");
+      delStore.classList.remove("active");
+      addProd.classList.remove("active");
+      delProd.classList.remove("active");
+      if (addUsr) addUsr.classList.remove("active");
+      delUsr.classList.add("active");
+      document.getElementById("removeUser").style.display = "block";
+    }
+
+    function hideAll() {
+      var profiles = document.getElementsByClassName("profile");
+      for (var i = 0; i < profiles.length; i++) {
+        profiles[i].style.display = "none";
+      }
+    }
+  </script>
+
+  <!-- Select Menu Script -->
+  <script>
+    let high_brands = document.querySelectorAll("#high_select");
+    let mid_brands = document.querySelectorAll("#mid_select");
+    let low_brands = document.querySelectorAll("#low_select");
+
+    let product_category = document.querySelector(
+      'select[name="product_category"]'
+    );
+    let product_brand = document.querySelector(
+      'select[name="product_brand"]'
+    );
+
+    product_category.addEventListener("change", async () => {
+      product_brand.disabled = false;
+      product_brand.selectedIndex = 0;
+      switch (product_category.value) {
+        case "High":
+          await new Promise((resolve, reject) => {
+            high_brands.forEach((brand) => {
+              brand.style.display = "block";
+            });
+            mid_brands.forEach((brand) => {
+              brand.style.display = "none";
+            });
+            low_brands.forEach((brand) => {
+              brand.style.display = "none";
+            });
+            resolve();
+          });
+          break;
+        case "Mid":
+          await new Promise((resolve, reject) => {
+            high_brands.forEach((brand) => {
+              brand.style.display = "none";
+            });
+            mid_brands.forEach((brand) => {
+              brand.style.display = "block";
+            });
+            low_brands.forEach((brand) => {
+              brand.style.display = "none";
+            });
+            resolve();
+          });
+          break;
+        case "Low":
+          await new Promise((resolve, reject) => {
+            high_brands.forEach((brand) => {
+              brand.style.display = "none";
+            });
+            mid_brands.forEach((brand) => {
+              brand.style.display = "none";
+            });
+            low_brands.forEach((brand) => {
+              brand.style.display = "block";
+            });
+            resolve();
+          });
+          break;
+      }
+    });
+  </script>
+</body>
+
+</html>

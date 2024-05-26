@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CARTIER ROYAL | <%= product.store %></title>
+    <link rel="stylesheet" href="/css/product.css" />
+  </head>
+
+  <body>
+    <%- include('partials/nav') %> <% if (error) { %>
+    <h2 id="error">Cannot add product of a different store to cart!</h2>
+    <% } %>
+    <div class="container-profile">
+      <div class="product-images">
+        <img
+          id="mainImage"
+          class="product-image-big"
+          src="<%= product.image %>"
+          alt="Product Image"
+        />
+      </div>
+      <div class="product-details">
+        <div class="product-title"><%= product.name %></div>
+        <div class="product-price">Price: $<%= product.price %></div>
+        <div class="product-store">Store: <%= store.name %></div>
+        <div class="product-origin">Brand : <%= product.brand %></div>
+        <div class="product-description"><p><%= product.description %></p></div>
+        <div class="product-buttons">
+          <% if (success) { %>
+          <button>Added to cart!</button>
+          <% } else { %>
+          <form action="/cart" method="post">
+            <input type="hidden" name="productId" value="<%= product.id %>" />
+            <input type="hidden" name="name" value="<%= product.name %>" />
+            <input type="hidden" name="image" value="<%= product.image %>" />
+            <input type="hidden" name="price" value="<%= product.price %>" />
+            <input type="hidden" name="store" value="<%= product.store %>" />
+            <input type="hidden" name="buyNow" value="false" />
+            <button type="submit">Add to Cart</button>
+          </form>
+          <% } %>
+          <form action="/cart" method="post">
+            <input type="hidden" name="productId" value="<%= product.id %>" />
+            <input type="hidden" name="image" value="<%= product.image %>" />
+            <input type="hidden" name="price" value="<%= product.price %>" />
+            <input type="hidden" name="store" value="<%= product.store %>" />
+            <input type="hidden" name="buyNow" value="true" />
+            <button type="submit">Buy Now</button>
+          </form>
+        </div>
+        <button class="seller_contact" type="button" onclick="contactSeller()">
+          Contact Seller
+        </button>
+      </div>
+    </div>
+
+    <script>
+      function contactSeller() {
+        // Confirm the user wants to contact the seller
+        if (confirm("Do you want to contact the seller?")) {
+          let email = "<%= store.email %>";
+          let productName = "<%= product.name %>";
+          let productId = "<%= product.id %>";
+          let subject =
+            "Inquiry about " + productName + " (Product ID: " + productId + ")";
+          let body =
+            "Hi, I have a query about the product " +
+            productName +
+            ". Can you provide more details?";
+          window.location.href =
+            "mailto:" + email + "?subject=" + subject + "&body=" + body;
+        }
+      }
+    </script>
+    <script>
+      const error = document.getElementById("error");
+      error.style.opacity = 1;
+      error.style.transition = "opacity 0.5s ease-in-out";
+      if (error) {
+        setTimeout(() => {
+          error.style.opacity = 0;
+          setTimeout(() => {
+            error.style.display = "none";
+          }, 500);
+        }, 3000);
+      }
+    </script>
+  </body>
+</html>

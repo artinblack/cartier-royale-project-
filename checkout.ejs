@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CARTIER ROYAL | CHECKOUT</title>
+    <link rel="stylesheet" href="/css/address.css" />
+  </head>
+
+  <body>
+    <div
+      class="container-address <%= order ? 'hidden' : '' %>"
+      id="checkoutForm"
+    >
+      <h2>Checkout</h2>
+      <form action="/checkout" method="POST">
+        <div class="form-group">
+          <label for="address" class="label">Address:</label>
+          <textarea
+            name="address"
+            id="address"
+            class="input-field"
+            rows="4"
+            placeholder="Enter your address"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label class="label">Payment Method:</label><br />
+          <input
+            type="radio"
+            id="cod"
+            name="payment"
+            value="cod"
+            class="radio-input"
+          />
+          <label for="cod" class="radio-label">Cash on Delivery</label>
+          <input
+            type="radio"
+            id="upi"
+            name="payment"
+            value="upi"
+            class="radio-input"
+          />
+          <label for="upi" class="radio-label">UPI</label>
+        </div>
+        <div class="buttons">
+          <button type="button" onclick="goBack()">Go Back</button>
+          <button type="submit">Place Order</button>
+        </div>
+      </form>
+    </div>
+
+    <div
+      class="container-address <%= !order ? 'hidden' : '' %>"
+      id="orderConfirmation"
+    >
+      <div class="temp-message">
+        <h2>Order Placed Successfully!</h2>
+        <p>Thank you for your order. Your order details:</p>
+        <p>
+          <strong>Products:</strong><% for (let i = 0; i < products.length; i++)
+          { %><%= products[i].name %><% if (i < (products.length - 1)) { %>, <%
+          } %><% } %>
+        </p>
+        <p><strong>Store:</strong> <%= order.store %></p>
+        <p><strong>Date:</strong> <%= order.date %></p>
+        <p><strong>Total Cost:</strong> <%= order.total %></p>
+        <p><strong>Address:</strong> <%= order.address %></p>
+        <p><strong>Payment Method:</strong> <%= order.payment %></p>
+      </div>
+      <div class="buttons">
+        <button onclick="goBack()">Go Back</button>
+      </div>
+    </div>
+
+    <script>
+      function goBack() {
+        window.location.href = "/cart";
+      }
+    </script>
+  </body>
+</html>

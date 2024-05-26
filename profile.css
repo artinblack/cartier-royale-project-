@@ -1,0 +1,197 @@
+/* Define colors */
+:root {
+    --primary-color: #222831;
+    --secondary-color: #FBF3F2;
+    --accent-color: #76ABAE;
+    --dark-color: #31363F;
+    --primary-color-ligher: #404853;
+    --secondary-color-darker: #1c768f;
+    --dark-color-lighter: #3e424b;
+    --accent-color-lighter: #a0c0c8;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--primary-color-ligher);
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: var(--secondary-color);
+    padding: 10px 20px;
+    transition: color 0.3s ease;
+
+}
+
+.navbar a:hover {
+    color: var(--accent-color);
+}
+
+/* Profile container */
+.container-profile {
+    display: flex;
+    max-width: 90%;
+    height: 100%;
+    margin: 20px auto;
+
+}
+
+/* Sidebar */
+.sidebar-profile {
+    flex: 1;
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 20px;
+    transition: background-color 0.3s ease;
+
+}
+
+#msgBackend {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.sidebar-profile h2 {
+    margin-bottom: 20px;
+    /* color: var(--accent-color); */
+}
+
+.sidebar-profile ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar-profile li {
+    margin-bottom: 30px;
+}
+
+.sidebar-profile a {
+    text-decoration: none;
+    color: var(--secondary-color);
+    transition: all 0.3s ease;
+    border-radius: 50px;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--secondary-color);
+    }
+}
+
+.active {
+    color: var(--primary-color);
+    font-weight: bold;
+    background-color: var(--accent-color);
+    padding: 10px 20px;
+
+}
+
+
+
+/* Profile section */
+.profile {
+    flex: 2;
+    padding: 20px;
+    background: var(--accent-color-lighter);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+}
+
+.profile h1 {
+    margin-bottom: 20px;
+}
+
+/* Profile info */
+.profile-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.profile-info .info {
+    margin-bottom: 10px;
+}
+
+/* Buttons */
+button,
+input[type="submit"] {
+    background-color: var(--dark-color);
+    color: var(--secondary-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+
+    &:hover {
+        background-color: var(--dark-color-lighter);
+        color: var(--secondary-color);
+        transform: scale(1.1);
+    }
+}
+
+
+
+.form-label {
+    display: inline-block;
+    width: 100%;
+    margin-right: 10px;
+    text-align: right;
+    font-size: 1em;
+    margin-top: 20px;
+}
+
+
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+textarea,
+select {
+    border: none;
+    border-bottom: 2px solid var(--accent-color);
+    outline: none;
+    transition: all 0.3s ease;
+    width: calc(90% - 110px);
+    margin-top: 20px;
+    display: block;
+    background: var(--accent-color-lighter);
+
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+    border-bottom: 2px solid var(--dark-color-lighter);
+    font-size: 1.05em;
+}
+
+/* Hide spinner arrows in number input */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
